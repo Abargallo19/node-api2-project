@@ -1,5 +1,5 @@
 {
-  "name": "node-api2-project",
+  "name": "api2-project",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,7 @@
     "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
+    "express": "^4.18.1",
     "knex": "^2.0.0",
     "sqlite3": "^5.0.8"
   },
@@ -22,5 +23,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BloomInstituteOfTechnology/node-api2-project.git"
-  }
+  },
+  "description": "## Introduction",
+  "bugs": {
+    "url": "https://github.com/BloomInstituteOfTechnology/node-api2-project/issues"
+  },
+  "homepage": "https://github.com/BloomInstituteOfTechnology/node-api2-project#readme",
+  "author": "",
+  "license": "ISC"
 }
