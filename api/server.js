@@ -4,28 +4,14 @@ const express = require('express');
 
 const server = express();
 
+server.use(express.json());
+
 const postMod = require('./posts/posts-model');
+const router = require('./posts/posts-router');
 
 const postRouter = require('./posts/posts-router');
 
-server.get('/api/posts', (req, res) => {
-    postMod.find()
-        .then(post => {
-            res.status(200).json(post);
-        })
-        .catch(error => {
-            console.log(error);
-            res.status(500).json({messsage: 'An error happenned'});
-        });
-});
-
-server.get('api/posts/:id', (req, res) => {
-    postMod.findById(req.params.id)
-    .then()
-    .catch()
-})
-
-
+server.use('/api/posts', postRouter);
 
 
 module.exports = server;
