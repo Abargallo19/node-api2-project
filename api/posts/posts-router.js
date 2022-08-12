@@ -30,14 +30,29 @@ router.get('/:id', (req, res) => {
         })
 });
 
-router.get('/:id/comments', (req, res) => {
-    postMod.findPostComments(req.params.id)
+router.get('/:id/comments', async (req, res) => {
+    
+    // try {
+    //     const comments = await postMod.findPostComments(req.params.id)
+    //     const { id } = await postMod.findCommentById(req.params.id)
+    //         // if (comments > 4) return res.status(404).json({ message: "The post with the specified ID does not exist" })
+
+    //         res.status(200).json({id, comments})
+    // } catch (error) {
+    //     res.status(500).json({ message: "The comments information could not be retrieved" })
+    // }
+        //postMod.findPostComments(req.params.id)
+        postMod.findCommentById(req.params.id)
+
+
+        
         .then(comment => {
             if (!comment) {
+                postMod.findCommentById(comment)
                 res.status(404).json({ message: "The post with the specified ID does not exist" })
 
             } else {
-                postMod.findCommentById(comment)
+                // postMod.findCommentById(comment)
                 res.status(200).json(comment)
             }
         })
@@ -70,28 +85,40 @@ router.post('/', (req, res) => {
 
 })
 
-router.delete('/:id', (req, res) => {
-    const killSwitch = req.params.id
-    let post
-    postMod.remove(killSwitch)
-        .then((postToDelete) => {
+router.delete('/:id', async (req, res) => {
 
-            if (!postToDelete) {
-                res.status(404).json({ message: "The post with the specified ID does not exist" })
+    try {
+        const killSwitch = await postMod.findById(req.params.id)
+        if(!killSwitch) {
+            res.status(404).json({ message: "The post with the specified ID does not exist" })
+        } else {
+            await postMod.remove(req.params.id)
+            res.json(killSwitch)
+        }
+    } catch (error) {
+        res.status(500).json({ message: "The post could not be removed" })
+    }
 
-            } else {
-                post = postToDelete
-                // postMod.remove(killSwitch)
-                res.json(post)
+     
+    // postMod.findById(req.params.id)
+    //     .then((killSwitch) => {
+    //       if (!killSwitch) {
+    //             res.status(
+                
+    //         } else {
+                
+                
+    //             res.json(killSwitch)
 
-            }
-        })
-        // .then(() => {
-        //     res.status(200).json(post)
+    //         }
+    //     })
+    //     .then(postMod.remove(req.params.id))
+    //     // .then(() => {
+    //     //     res.status(200).json(post)
+    //     // })
+        // .catch(() => {
+        //     res.status(500).json({ message: "The post could not be removed" })
         // })
-        .catch(() => {
-            res.status(500).json({ message: "The post could not be removed" })
-        })
 
 });
 
@@ -110,8 +137,7 @@ router.put('/:id', async (req, res) => {
         res.status(500).json({ message: "The post information could not be modified" })
     }
 
-
-
+});
 
 
     //     postMod.update(req.params.id, { title, contents })
@@ -132,7 +158,7 @@ router.put('/:id', async (req, res) => {
     //     res.status(500).json({message: "The post information could not be modified"})
     // })
 
-})
+
 
 
 module.exports = router;
