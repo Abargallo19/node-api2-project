@@ -31,34 +31,47 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/:id/comments', async (req, res) => {
+    try {
+        const post = await postMod.findById(req.params.id)
+        if(!post) {
+     res.status(404).json({message: "The post with the specified ID does not exist"})
+ } else {
+     const messages = await postMod.findPostComments(req.params.id)
+     res.json(messages)
+ }
+    } catch (error) {
+        res.status(500).json({ message: "The comments information could not be retrieved" })
+    }
+
+
     
     // try {
     //     const comments = await postMod.findPostComments(req.params.id)
     //     const { id } = await postMod.findCommentById(req.params.id)
-    //         // if (comments > 4) return res.status(404).json({ message: "The post with the specified ID does not exist" })
+    //         // if (!comments) return res.status(404).json({ message: "The post with the specified ID does not exist" })
 
     //         res.status(200).json({id, comments})
     // } catch (error) {
     //     res.status(500).json({ message: "The comments information could not be retrieved" })
     // }
         //postMod.findPostComments(req.params.id)
-        postMod.findCommentById(req.params.id)
+        // postMod.findCommentById(req.params.id)
 
-
+//*********************************** */
         
-        .then(comment => {
-            if (!comment) {
-                postMod.findCommentById(comment)
-                res.status(404).json({ message: "The post with the specified ID does not exist" })
+        // .then(comment => {
+        //     if (!comment) {
+        //         postMod.findCommentById(comment)
+        //         res.status(404).json({ message: "The post with the specified ID does not exist" })
 
-            } else {
-                // postMod.findCommentById(comment)
-                res.status(200).json(comment)
-            }
-        })
-        .catch(() => {
-            res.status(500).json({ message: "The comments information could not be retrieved" })
-        })
+        //     } else {
+        //         // postMod.findCommentById(comment)
+        //         res.status(200).json(comment)
+        //     }
+        // })
+        // .catch(() => {
+        //     res.status(500).json({ message: "The comments information could not be retrieved" })
+        // })
 });
 
 
